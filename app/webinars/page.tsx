@@ -1,6 +1,8 @@
+import Link from "next/link"
 import { Navigation } from "@/components/navigation"
 import { Footer } from "@/components/footer"
 import { Calendar, Clock, Users, Video, CreditCard } from "lucide-react"
+import { useAuth } from "@/context/AuthContext"
 
 export default function WebinarsPage() {
   const upcomingWebinars = [
@@ -71,6 +73,8 @@ export default function WebinarsPage() {
     },
   ]
 
+  const { user } = useAuth()
+
   return (
     <>
       <Navigation />
@@ -136,10 +140,23 @@ export default function WebinarsPage() {
                       <p className="text-sm text-muted-foreground mb-1">Price</p>
                       <p className="text-2xl font-bold text-primary">{webinar.price}</p>
                     </div>
-                    <button className="px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:opacity-90 transition-opacity font-semibold flex items-center gap-2">
-                      <CreditCard size={18} />
-                      Book Seat
-                    </button>
+                    {user ? (
+                      <Link
+                        href={`/webinars/book/${webinar.id}`}
+                        className="px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:opacity-90 transition-opacity font-semibold flex items-center gap-2"
+                      >
+                        <CreditCard size={18} />
+                        Book Seat
+                      </Link>
+                    ) : (
+                      <Link
+                        href={`/login?redirect=${encodeURIComponent(`/webinars?book=${webinar.id}`)}`}
+                        className="px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:opacity-90 transition-opacity font-semibold flex items-center gap-2"
+                      >
+                        <CreditCard size={18} />
+                        Book Seat
+                      </Link>
+                    )}
                   </div>
                 </div>
               </div>
