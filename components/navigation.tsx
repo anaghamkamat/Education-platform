@@ -1,13 +1,14 @@
 "use client"
 
-import Link from "next/link"
 import { useState } from "react"
+import { useRouter } from "next/navigation"
 import { Menu, X } from "lucide-react"
-import { ThemeToggle } from "@/components/theme-toggle"
 import { motion } from "framer-motion"
+import { ThemeToggle } from "@/components/theme-toggle"
 
 export function Navigation() {
   const [isOpen, setIsOpen] = useState(false)
+  const router = useRouter()
 
   const navItems = [
     { label: "Home", href: "/" },
@@ -29,75 +30,55 @@ export function Navigation() {
         <div className="flex justify-between items-center h-16">
 
           {/* Logo */}
-          <Link href="/" className="font-bold text-2xl text-primary">
+          <button
+            onClick={() => router.push("/")}
+            className="font-bold text-2xl text-primary"
+          >
             Shobha Pujari
-          </Link>
+          </button>
 
-          {/* Desktop Navigation */}
+          {/* Desktop Nav */}
           <div className="hidden md:flex gap-8">
             {navItems.map((item) => (
-              <Link
+              <button
                 key={item.href}
-                href={item.href}
-                className="text-foreground hover:text-primary transition-colors text-sm font-medium"
+                onClick={() => router.push(item.href)}
+                className="text-foreground hover:text-primary text-sm font-medium"
               >
                 {item.label}
-              </Link>
+              </button>
             ))}
           </div>
 
-          {/* Right side (CTA + Dark Mode) */}
+          {/* Right */}
           <div className="hidden md:flex items-center gap-4">
             <ThemeToggle />
-
-            <Link
-              href="/courses"
-              className="px-6 py-2 bg-primary text-primary-foreground rounded-lg
-                         hover:opacity-90 transition-opacity text-sm font-medium"
-            >
-              Get Started
-            </Link>
           </div>
 
-          {/* Mobile Menu Button */}
+          {/* Mobile */}
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden p-2 text-foreground"
+            className="md:hidden p-2"
           >
             {isOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
         </div>
 
-        {/* Mobile Menu */}
         {isOpen && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            transition={{ duration: 0.3 }}
-            className="md:hidden pb-4 space-y-2"
-          >
+          <div className="md:hidden pb-4 space-y-2">
             {navItems.map((item) => (
-              <Link
+              <button
                 key={item.href}
-                href={item.href}
-                className="block px-4 py-2 text-foreground hover:bg-muted rounded-lg transition-colors"
-                onClick={() => setIsOpen(false)}
+                onClick={() => {
+                  router.push(item.href)
+                  setIsOpen(false)
+                }}
+                className="block w-full text-left px-4 py-2 hover:bg-muted rounded-lg"
               >
                 {item.label}
-              </Link>
+              </button>
             ))}
-
-            <div className="flex items-center gap-4 px-4">
-              <ThemeToggle />
-              <Link
-                href="/courses"
-                className="flex-1 px-4 py-2 bg-primary text-primary-foreground
-                           rounded-lg text-center font-medium"
-              >
-                Get Started
-              </Link>
-            </div>
-          </motion.div>
+          </div>
         )}
       </div>
     </motion.nav>
