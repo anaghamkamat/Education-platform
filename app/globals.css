@@ -124,4 +124,14 @@
   body {
     @apply bg-background text-foreground;
   }
+
+  /* Dark-mode background: subtle radial highlight and deep green-black base */
+  .dark body {
+    background-color: var(--background);
+    background-image: radial-gradient(740px 420px at 75% 30%, rgba(38,76,64,0.24), transparent 30%),
+      linear-gradient(180deg, rgba(4,20,18,1) 0%, rgba(6,20,18,1) 40%, rgba(3,10,10,1) 100%);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+  }
 }
